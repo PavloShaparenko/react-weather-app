@@ -1,0 +1,28 @@
+{
+  "name": "react-snow",
+  "version": "0.0.1",
+  "description": "React Component for snowy effect",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:JonJee/react-snow.git"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "snow",
+    "particle",
+    "effect",
+    "rain",
+    "snowy",
+    "rainy",
+    "fog",
+    "foggy",
+    "weather"
+  ],
+  "author": "Jon Jee",
+  "license": "MIT"
+}
