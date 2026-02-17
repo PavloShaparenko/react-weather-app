@@ -4,16 +4,18 @@ import UserCard from '../features/UserCard';
 import SearchLocation from '../features/SearchLocation';
 import WeatherForecast from '../features/WeatherForecast';
 
-const UpWeatherPc = ({ Scity = "Lublin" }) => {
+const UpWeatherPc = ({ Scity = "Lublin", lang = 'en' }) => {
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(true);
   
   let Scountry = "Poland";
   
   const [locationInfo, setLocationInfo] = useState({ city: Scity, country: Scountry });
-
+  
   
   const targetCity = Scity;
+  // map app language to geocoding language codes (open-meteo uses 'uk' for ukrainian)
+  const langCode = lang === 'ua' ? 'uk' : (lang || 'en');
 
   useEffect(() => {
     const fetchAllWeatherData = async () => {
@@ -22,7 +24,7 @@ const UpWeatherPc = ({ Scity = "Lublin" }) => {
 
         
         const geoResponse = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?name=${targetCity}&count=1&language=en&format=json`
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(targetCity)}&count=1&language=${langCode}&format=json`
         );
         const geoData = await geoResponse.json();
 
@@ -30,10 +32,11 @@ const UpWeatherPc = ({ Scity = "Lublin" }) => {
           throw new Error("Город не найден");
         }
 
-        const { latitude, longitude, name, country } = geoData.results[0];
-        
-        
-        setLocationInfo({ city: name, country: country });
+        const { latitude, longitude, name, country, local_names } = geoData.results[0];
+        // Prefer localized name if available
+        const displayName = (local_names && (local_names[langCode] || local_names[lang])) || name || targetCity;
+        const displayCountry = country || '';
+        setLocationInfo({ city: displayName, country: displayCountry });
 
         
         const weatherResponse = await fetch(
@@ -80,7 +83,7 @@ const UpWeatherPc = ({ Scity = "Lublin" }) => {
 
       <div className="location-search">
         {/* Данные о стране и городе теперь приходят динамически из API геокодирования */}
-        <SearchLocation Searchcountry={locationInfo.country} Searchcity={locationInfo.city} />
+        <SearchLocation displayCountry={locationInfo.country} displayCity={locationInfo.city} lang={lang} />
 
         {loading ? (
           <div className="loading">loading</div>

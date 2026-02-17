@@ -41,7 +41,7 @@ function App() {
       <WeatherBackground weatherData={weather?.fullRawData} /> 
 
       <Header onSearch={handleCitySearch} lang={lang} changeLang={changeLanguage} />
-      <UpWeatherPc Scity={searchedCity} />
+      <UpWeatherPc Scity={searchedCity} lang={lang} />
       
       {/* WeatherManager wciąż działa po swojemu */}
       <WeatherManager city={searchedCity} lang={lang} />
