@@ -27,8 +27,18 @@ const UpWeatherPc = ({ Scity = "Lublin", lang = 'en' }) => {
         const geoResponse = await fetch(
           `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(targetCity)}&count=1&language=${langCode}&format=json`
         );
-        const geoData = await geoResponse.json();
-        console.debug('geoData response:', geoData);
+        let geoData = await geoResponse.json();
+        console.debug('geoData response (initial):', geoData);
+
+        // If no results in requested language, retry with English as a fallback
+        if ((!geoData.results || geoData.results.length === 0) && langCode !== 'en') {
+          const fallbackResp = await fetch(
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(targetCity)}&count=1&language=en&format=json`
+          );
+          const fallbackData = await fallbackResp.json();
+          console.debug('geoData response (fallback en):', fallbackData);
+          geoData = fallbackData;
+        }
 
         if (!geoData.results || geoData.results.length === 0) {
           throw new Error("Город не найден");
