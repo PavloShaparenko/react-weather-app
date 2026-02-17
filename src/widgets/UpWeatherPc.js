@@ -7,6 +7,7 @@ import WeatherForecast from '../features/WeatherForecast';
 const UpWeatherPc = ({ Scity = "Lublin", lang = 'en' }) => {
   const [forecast, setForecast] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [geoRaw, setGeoRaw] = useState(null);
   
   let Scountry = "Poland";
   
@@ -27,12 +28,15 @@ const UpWeatherPc = ({ Scity = "Lublin", lang = 'en' }) => {
           `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(targetCity)}&count=1&language=${langCode}&format=json`
         );
         const geoData = await geoResponse.json();
+        console.debug('geoData response:', geoData);
 
         if (!geoData.results || geoData.results.length === 0) {
           throw new Error("Город не найден");
         }
 
         const { latitude, longitude, name, country, local_names } = geoData.results[0];
+        setGeoRaw(geoData.results[0]);
+        console.debug('selected geocoding result:', geoData.results[0]);
         // Prefer localized name if available
         const displayName = (local_names && (local_names[langCode] || local_names[lang])) || name || targetCity;
         const displayCountry = country || '';
@@ -60,7 +64,7 @@ const UpWeatherPc = ({ Scity = "Lublin", lang = 'en' }) => {
     };
 
     fetchAllWeatherData();
-  }, [targetCity]); 
+  }, [targetCity, langCode]); 
 
   const mapWmoCodeToCondition = (code) => {
     if (code === 0) return 'sunny';
@@ -84,6 +88,12 @@ const UpWeatherPc = ({ Scity = "Lublin", lang = 'en' }) => {
       <div className="location-search">
         {/* Данные о стране и городе теперь приходят динамически из API геокодирования */}
         <SearchLocation displayCountry={locationInfo.country} displayCity={locationInfo.city} lang={lang} />
+
+        {process.env.NODE_ENV !== 'production' && geoRaw && (
+          <pre className="geo-debug" style={{maxHeight:200,overflow:'auto',fontSize:12,background:'#111',color:'#9f9',padding:8,marginTop:8}}>
+            {JSON.stringify(geoRaw,null,2)}
+          </pre>
+        )}
 
         {loading ? (
           <div className="loading">loading</div>
