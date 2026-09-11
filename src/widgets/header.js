@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import '../shared/styles/style.css';
 import { translations } from '../translations';
 
-const Header = ({ onSearch, lang = 'en', changeLang }) => { // Добавляем пропс onSearch
+const Header = ({ onSearch, lang = 'en', changeLang }) => { 
   const [langOpen, setLangOpen] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(false);
   
-  // 1. Создаем стейт для хранения того, что пишет пользователь
+
   const [inputValue, setInputValue] = useState('');
 
-  // 2. Функция-обработчик нажатия клавиш
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       if (inputValue.trim()) {
-        onSearch(inputValue); // Отдаем данные наверх в родителя
-        setInputValue('');    // Очищаем поиск после нажатия
+        onSearch(inputValue); 
+        setInputValue('');    
       }
     }
   };
@@ -31,9 +31,9 @@ const Header = ({ onSearch, lang = 'en', changeLang }) => { // Добавляе�
           type="text" 
           placeholder={translations[lang]?.search || 'Search city...'} 
           className="my-input"
-          value={inputValue} // Связываем инпут со стейтом
-          onChange={(e) => setInputValue(e.target.value)} // Обновляем стейт при каждом символе
-          onKeyDown={handleKeyDown} // Слушаем нажатие Enter
+          value={inputValue} 
+          onChange={(e) => setInputValue(e.target.value)} 
+          onKeyDown={handleKeyDown} 
         />
       </div>
 
