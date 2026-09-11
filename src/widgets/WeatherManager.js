@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, ReferenceLine, ReferenceDot, Label,
-  ReferenceArea // Dodano ReferenceArea
+  ReferenceArea 
 } from 'recharts';
 import { translations } from '../translations';
 
-// --- KOMPONENTY POMOCNICZE ---
+
 
 const CustomizedDot = (props) => {
   const { cx, cy, payload, index, interval } = props;
@@ -36,7 +36,7 @@ const SunIcon = ({ x, y, type }) => {
   );
 };
 
-// --- KOMPONENT WYKRESU ---
+
 
 const WeatherChart = ({ data, astroToday, astroTomorrow, t }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -101,14 +101,13 @@ const WeatherChart = ({ data, astroToday, astroTomorrow, t }) => {
           
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
 
-          {/* --- STREFY NOCNE (PRZYCIEMNIENIE) --- */}
-          {/* Noc 1: Od początku do pierwszego wschodu */}
+          
           {sunX1 && <ReferenceArea x1={data[0]?.fullTime} x2={sunX1} fill="rgba(0, 0, 30, 0.3)" isFront={false} />}
           
-          {/* Noc 2: Od dzisiejszego zachodu do jutrzejszego wschodu */}
+          
           {sunX2 && sunX3 && <ReferenceArea x1={sunX2} x2={sunX3} fill="rgba(0, 0, 30, 0.3)" isFront={false} />}
           
-          {/* Noc 3: Od jutrzejszego zachodu do końca wykresu */}
+          
           {sunX4 && <ReferenceArea x1={sunX4} x2={data[data.length - 1]?.fullTime} fill="rgba(0, 0, 30, 0.3)" isFront={false} />}
           
           <XAxis 
@@ -200,7 +199,7 @@ const WeatherChart = ({ data, astroToday, astroTomorrow, t }) => {
   );
 };
 
-// --- GŁÓWNY KOMPONENT MANAGERA ---
+
 
 const WeatherManager = ({ city = 'Vinnytsia', lang = 'en' }) => {
   const [chartData, setChartData] = useState([]);
@@ -215,7 +214,7 @@ const WeatherManager = ({ city = 'Vinnytsia', lang = 'en' }) => {
       try {
         setLoading(true);
         let query = city ? city.trim() : '';
-        // remove stray characters (e.g. accidental '>' from paste) and normalize
+        
         query = query.replace(/[<>]/g, '').trim();
         const qLower = query.toLowerCase();
         if (qLower === 'vinnytsia' || qLower === 'вінниця') query = 'Vinnitsa';
