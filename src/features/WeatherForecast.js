@@ -2,7 +2,7 @@ import React from 'react';
 import '../shared/styles/style.css';
 
 const WeatherForecast = ({ data }) => {
-  // Если данные еще не пришли из API, не рисуем ничего или показываем скелетон
+  
   if (!data || data.length === 0) return <div className="forecast-container">Loading...</div>;
 
   const getWeatherIcon = (condition) => {
